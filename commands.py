@@ -4,22 +4,22 @@ from validators import input_error
 
 @input_error
 def add_contact(args, book):
-    if len(args) < 2 or not args[-1].isdigit() or len(args[-1]) != 10:
+    if len(args) < 2:
         raise ValueError
 
     *name_parts, phone = args
     name = " ".join(name_parts)
 
     record = book.find(name)
-    message = "Contact updated."
 
     if record is None:
         record = Record(name)
+        record.add_phone(phone)
         book.add_record(record)
-        message = "Contact added."
+        return "Contact added."
 
     record.add_phone(phone)
-    return message
+    return "Contact updated."
 
 
 @input_error
