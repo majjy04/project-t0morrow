@@ -50,7 +50,6 @@ class Notebook:
     ) -> str:
         for note in self.notes:
             if note.text.lower() == old_text.lower():
-
                 if new_text:
                     note.text = new_text
 

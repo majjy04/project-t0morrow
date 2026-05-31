@@ -13,7 +13,6 @@ from pathlib import Path
 from contacts import AddressBook
 from notes import Notebook
 
-
 # Data is stored in the user's home directory (requirement: "у папці користувача").
 DATA_DIR = Path.home() / ".assistant"
 DATA_FILE = DATA_DIR / "assistant_data.pkl"

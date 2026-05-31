@@ -2,7 +2,6 @@ from contacts import Record
 from notes import Note
 from validators import input_error
 
-
 # ---------- Contact commands ----------
 
 @input_error
@@ -94,7 +93,9 @@ def birthdays(args, book):
         try:
             days = int(args[0])
         except ValueError:
-            raise ValueError("Please provide a valid number of days.")
+            raise ValueError(
+                "Please provide a valid number of days."
+            ) from None
     else:
         days = 7
     upcoming = book.get_upcoming_birthdays(days)
@@ -165,10 +166,16 @@ def _split_text_and_tags(tokens):
 @input_error
 def add_note(args, notebook):
     if not args:
-        raise ValueError("Please provide note text. Format: add-note <text> [#tag1 #tag2 ...]")
+        raise ValueError(
+            "Please provide note text. "
+            "Format: add-note <text> [#tag1 #tag2 ...]"
+        )
     text, tags = _split_text_and_tags(args)
     if not text:
-        raise ValueError("Please provide note text. Format: add-note <text> [#tag1 #tag2 ...]")
+        raise ValueError(
+            "Please provide note text. "
+            "Format: add-note <text> [#tag1 #tag2 ...]"
+        )
     return notebook.add_note(Note(text, tags))
 
 
@@ -195,7 +202,10 @@ def search_notes(args, notebook):
 def delete_note(args, notebook):
     text = " ".join(args)
     if not text:
-        raise ValueError("Please provide note text to delete. Format: delete-note <text>")
+        raise ValueError(
+            "Please provide note text to delete. "
+            "Format: delete-note <text>"
+        )
     return notebook.delete_note(text)
 
 
@@ -203,12 +213,18 @@ def delete_note(args, notebook):
 def edit_note(args, notebook):
     # Syntax: edit-note <old text> -> <new text> [#tag1 #tag2 ...]
     if "->" not in args:
-        raise ValueError("Invalid format. Use: edit-note <old text> -> <new text> [#tag1 ...]")
+        raise ValueError(
+            "Invalid format. "
+            "Use: edit-note <old text> -> <new text> [#tag1 ...]"
+        )
     sep = args.index("->")
     old_text = " ".join(args[:sep])
     new_text, new_tags = _split_text_and_tags(args[sep + 1:])
     if not old_text or (not new_text and not new_tags):
-        raise ValueError("Invalid format. Use: edit-note <old text> -> <new text> [#tag1 ...]")
+        raise ValueError(
+            "Invalid format. "
+            "Use: edit-note <old text> -> <new text> [#tag1 ...]"
+        )
     return notebook.edit_note(old_text, new_text or None, new_tags or None)
 
 
@@ -223,20 +239,32 @@ def sort_notes(notebook):
 @input_error
 def add_tag(args, notebook):
     if not args:
-        raise ValueError("Please provide note text and tag(s). Format: add-tag <text> #tag1 [#tag2 ...]")
+        raise ValueError(
+            "Please provide note text and tag(s). "
+            "Format: add-tag <text> #tag1 [#tag2 ...]"
+        )
     text, tags = _split_text_and_tags(args)
     if not text or not tags:
-        raise ValueError("Please provide note text and tag(s). Format: add-tag <text> #tag1 [#tag2 ...]")
+        raise ValueError(
+            "Please provide note text and tag(s). "
+            "Format: add-tag <text> #tag1 [#tag2 ...]"
+        )
     return notebook.add_tags_to_note(text, tags)
 
 
 @input_error
 def delete_tag(args, notebook):
     if not args:
-        raise ValueError("Please provide note text and tag. Format: delete-tag <text> #tag")
+        raise ValueError(
+            "Please provide note text and tag. "
+            "Format: delete-tag <text> #tag"
+        )
     text, tags = _split_text_and_tags(args)
     if not text or len(tags) != 1:
-        raise ValueError("Please provide note text and exactly one tag. Format: delete-tag <text> #tag")
+        raise ValueError(
+            "Please provide note text and exactly one tag. "
+            "Format: delete-tag <text> #tag"
+        )
     return notebook.remove_tag_from_note(text, tags[0])
 
 
@@ -248,7 +276,12 @@ def edit_tag(args, notebook):
     sep = args.index("->")
     left_text, left_tags = _split_text_and_tags(args[:sep])
     right_text, right_tags = _split_text_and_tags(args[sep + 1:])
-    if not left_text or len(left_tags) != 1 or len(right_tags) != 1 or right_text.strip():
+    if (
+        not left_text
+        or len(left_tags) != 1
+        or len(right_tags) != 1
+        or right_text.strip()
+    ):
         raise ValueError("Invalid format. Use: edit-tag <text> #old -> #new")
     return notebook.edit_tag_in_note(left_text, left_tags[0], right_tags[0])
 

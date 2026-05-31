@@ -6,22 +6,22 @@ from commands import (
     add_contact,
     add_email,
     add_note,
+    add_tag,
     birthdays,
     change_contact,
     delete_contact,
     delete_note,
+    delete_tag,
     edit_note,
+    edit_tag,
     search_contacts,
     search_notes,
     show_all,
     show_birthday,
+    show_help,
     show_notes,
     show_phone,
     sort_notes,
-    show_help,
-    add_tag,
-    delete_tag,
-    edit_tag,
 )
 from storage import load_data, save_data
 
@@ -79,7 +79,8 @@ def main():
             if command not in COMMANDS:
                 matches = difflib.get_close_matches(command, COMMANDS, n=1, cutoff=0.6)
                 if matches:
-                    confirm = input(f"Did you mean '{matches[0]}'? (y/n): ").strip().lower()
+                    prompt = f"Did you mean '{matches[0]}'? (y/n): "
+                    confirm = input(prompt).strip().lower()
                     if confirm in ("y", "yes"):
                         command = matches[0]
                     else:
@@ -91,12 +92,10 @@ def main():
 
             if command in ["close", "exit"]:
                 break
-            elif command == "hello":
+            if command == "hello":
                 print("How can I help you?")
             elif command == "help":
                 print(show_help())
-
-
 
             # Contact commands
             elif command == "add":
@@ -133,9 +132,7 @@ def main():
                 print(delete_note(args, notebook))
             elif command == "edit-note":
                 print(edit_note(args, notebook))
-            elif command == "sort-notes":
-                print(sort_notes(notebook))
-            elif command == "show-all-notes":
+            elif command == "sort-notes" or command == "show-all-notes":
                 print(sort_notes(notebook))
             elif command == "add-tag":
                 print(add_tag(args, notebook))
