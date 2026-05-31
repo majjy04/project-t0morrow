@@ -87,6 +87,8 @@ Type `help` inside the app to see all available commands.
 |---------|-------------|
 | `add <name> <phone>` | Add a contact or attach a new phone to an existing one |
 | `change <name> <old> <new>` | Change a contact's phone number |
+| `remove-phone <name> <phone>` | Remove a phone number from a contact |
+| `edit <name> <field> <value>` | Edit a field: `phone`, `email`, `address`, or `birthday` |
 | `phone <name>` | Show all phones for a contact |
 | `all` | Show all contacts |
 | `add-birthday <name> <DD.MM.YYYY>` | Add a birthday |

@@ -12,8 +12,10 @@ from commands import (
     delete_contact,
     delete_note,
     delete_tag,
+    edit_contact,
     edit_note,
     edit_tag,
+    remove_phone,
     search_contacts,
     search_notes,
     show_all,
@@ -32,6 +34,8 @@ COMMANDS = [
     "help",
     "add",
     "change",
+    "remove-phone",
+    "edit",
     "phone",
     "all",
     "add-birthday",
@@ -102,6 +106,10 @@ def main():
                 print(add_contact(args, book))
             elif command == "change":
                 print(change_contact(args, book))
+            elif command == "remove-phone":
+                print(remove_phone(args, book))
+            elif command == "edit":
+                print(edit_contact(args, book))
             elif command == "phone":
                 print(show_phone(args, book))
             elif command == "all":
