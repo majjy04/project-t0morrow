@@ -4,6 +4,9 @@ from validators import input_error
 
 # ---------- Contact commands ----------
 
+EDITABLE_FIELDS = ("phone", "email", "address", "birthday")
+
+
 @input_error
 def add_contact(args, book):
     if len(args) < 2:
@@ -150,6 +153,55 @@ def delete_contact(args, book):
     return f"Contact '{name}' deleted."
 
 
+@input_error
+def remove_phone(args, book):
+    """Remove a phone number from a contact.
+
+    Syntax: remove-phone <name> <phone>
+    """
+    if len(args) < 2:
+        raise ValueError(
+            "Please provide name and phone. "
+            "Format: remove-phone <name> <phone>"
+        )
+    *name_parts, phone = args
+    name = " ".join(name_parts)
+
+    record = book.find(name)
+    if not record:
+        raise KeyError
+
+    record.remove_phone(phone)
+    return f"Phone {phone} removed from {name}."
+
+
+@input_error
+def edit_contact(args, book):
+    """Edit a single field of an existing contact.
+
+    Syntax: edit <name> <phone|email|address|birthday> <value>
+    """
+    field_idx = next(
+        (i for i, token in enumerate(args) if token.lower() in EDITABLE_FIELDS),
+        None,
+    )
+    if field_idx in (None, 0) or field_idx == len(args) - 1:
+        raise ValueError(
+            "Invalid format. "
+            "Use: edit <name> <phone|email|address|birthday> <value>"
+        )
+
+    name = " ".join(args[:field_idx])
+    field = args[field_idx].lower()
+    value = " ".join(args[field_idx + 1:])
+
+    if not book.find(name):
+        raise KeyError
+
+    book.edit_record(name, **{field: value})
+    return f"{name}'s {field} updated successfully."
+
+
 # ---------- Note commands ----------
 
 def _split_text_and_tags(tokens):
@@ -292,6 +344,8 @@ def show_help():
 Contacts:
   add <name> <phone>                       - Add or update contact's phone
   change <name> <old_phone> <new_phone>   - Change an existing phone number
+  remove-phone <name> <phone>              - Remove a phone number from a contact
+  edit <name> <field> <value>              - Edit a field (phone/email/address/birthday)
   phone <name>                             - Show all phone numbers for a contact
   all                                      - Show all saved contacts
   add-birthday <name> <DD.MM.YYYY>        - Add a birthday for a contact
