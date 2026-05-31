@@ -14,15 +14,15 @@ def add_contact(args, book):
     name = " ".join(name_parts)
 
     record = book.find(name)
-    message = "Contact updated."
 
     if record is None:
         record = Record(name)
+        record.add_phone(phone)
         book.add_record(record)
-        message = "Contact added."
+        return "Contact added."
 
     record.add_phone(phone)
-    return message
+    return "Contact updated."
 
 
 @input_error
