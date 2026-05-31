@@ -64,5 +64,44 @@ class Notebook:
     def sort_notes_by_tags(self) -> list[Note]:
         return sorted(
             self.notes,
-            key=lambda note: (not note.tags, sorted(note.tags) if note.tags else [])
+            key=lambda note: (
+                not note.tags,
+                sorted(note.tags) if note.tags else [],
+                note.text.lower()
+            )
         )
+
+    def add_tags_to_note(self, text: str, tags: list[str]) -> str:
+        for note in self.notes:
+            if note.text.lower() == text.lower():
+                for tag in tags:
+                    if tag not in note.tags:
+                        note.tags.append(tag)
+                return "Tags added successfully."
+        return "Note not found."
+
+    def remove_tag_from_note(self, text: str, tag: str) -> str:
+        for note in self.notes:
+            if note.text.lower() == text.lower():
+                tag_lower = tag.lower()
+                for existing_tag in note.tags:
+                    if existing_tag.lower() == tag_lower:
+                        note.tags.remove(existing_tag)
+                        return f"Tag '#{tag}' removed successfully."
+                return f"Tag '#{tag}' not found in this note."
+        return "Note not found."
+
+    def edit_tag_in_note(self, text: str, old_tag: str, new_tag: str) -> str:
+        for note in self.notes:
+            if note.text.lower() == text.lower():
+                old_lower = old_tag.lower()
+                new_lower = new_tag.lower()
+                for idx, existing_tag in enumerate(note.tags):
+                    if existing_tag.lower() == old_lower:
+                        if any(t.lower() == new_lower for t in note.tags):
+                            note.tags.remove(existing_tag)
+                        else:
+                            note.tags[idx] = new_tag
+                        return f"Tag '#{old_tag}' changed to '#{new_tag}' successfully."
+                return f"Tag '#{old_tag}' not found in this note."
+        return "Note not found."
