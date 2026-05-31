@@ -162,4 +162,4 @@ Good bye!
 
 Data is stored in `~/.assistant/assistant_data.pkl` and is loaded automatically on the next app run.
 
-> ⚠️ Always exit the app with `exit` to save your data.
+Data is also saved automatically if you interrupt the app with `Ctrl+C` or `Ctrl+D` (Linux/macOS) / `Ctrl+Z` (Windows), so you won't lose changes on accidental exit.
