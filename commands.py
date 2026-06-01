@@ -124,13 +124,15 @@ def add_email(args, book):
 def add_address(args, book):
     if len(args) < 2:
         raise ValueError("Please provide name and address.")
-    name, *address_parts = args
-    address = " ".join(address_parts)
-    record = book.find(name)
-    if not record:
-        raise KeyError
-    record.add_address(address)
-    return f"Address added for {name}."
+    # Name may be multi-word; match the longest existing contact name and
+    # treat the remaining tokens as the address.
+    for i in range(len(args) - 1, 0, -1):
+        name = " ".join(args[:i])
+        record = book.find(name)
+        if record:
+            record.add_address(" ".join(args[i:]))
+            return f"Address added for {name}."
+    raise KeyError
 
 
 @input_error
