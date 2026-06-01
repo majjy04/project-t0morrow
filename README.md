@@ -114,6 +114,7 @@ Type `help` inside the app to see all available commands.
 | `edit-tag <text> #old -> #new` | Change a tag on an existing note |
 
 > 💡 **Tip:** It's best to put tags at the end of an `add-note` command rather than in the middle of the text.
+> ℹ️ If there are identical notes - the one that was added first will be target for a command.
 
 ---
 
