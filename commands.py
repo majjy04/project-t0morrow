@@ -104,7 +104,14 @@ def birthdays(args, book):
     upcoming = book.get_upcoming_birthdays(days)
     if not upcoming:
         return f"No birthdays in the next {days} days."
-    return "\n".join(f"{b['name']}: {b['congratulation_date']}" for b in upcoming)
+
+    lines = []
+    for entry in upcoming:
+        line = f"{entry['name']}: {entry['birthday_date']}"
+        if entry["congratulation_date"] != entry["birthday_date"]:
+            line += f" (congratulate on {entry['congratulation_date']})"
+        lines.append(line)
+    return "\n".join(lines)
 
 
 @input_error
