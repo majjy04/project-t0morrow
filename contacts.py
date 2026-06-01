@@ -248,6 +248,7 @@ class AddressBook(UserDict):
             upcoming.append(
                 {
                     "name": record.name.value,
+                    "birthday_date": birthday_this_year.strftime("%d.%m.%Y"),
                     "congratulation_date": congratulation_date.strftime(
                         "%d.%m.%Y"
                     ),
