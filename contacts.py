@@ -232,9 +232,6 @@ class AddressBook(UserDict):
                     year=today.year + 1
                 )
 
-            # Filter on the ACTUAL birthday, not the (possibly shifted)
-            # congratulation date, so a weekend birthday near the boundary
-            # is not wrongly dropped.
             if (birthday_this_year - today).days > days:
                 continue
 
