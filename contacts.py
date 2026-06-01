@@ -232,18 +232,23 @@ class AddressBook(UserDict):
                     year=today.year + 1
                 )
 
-            if birthday_this_year.weekday() >= 5:
-                birthday_this_year += timedelta(
-                    days=(7 - birthday_this_year.weekday())
-                )
-
-            if birthday_this_year - today > timedelta(days=days):
+            # Filter on the ACTUAL birthday, not the (possibly shifted)
+            # congratulation date, so a weekend birthday near the boundary
+            # is not wrongly dropped.
+            if (birthday_this_year - today).days > days:
                 continue
+
+            # If the birthday lands on a weekend, congratulate on Monday.
+            congratulation_date = birthday_this_year
+            if congratulation_date.weekday() >= 5:
+                congratulation_date += timedelta(
+                    days=(7 - congratulation_date.weekday())
+                )
 
             upcoming.append(
                 {
                     "name": record.name.value,
-                    "congratulation_date": birthday_this_year.strftime(
+                    "congratulation_date": congratulation_date.strftime(
                         "%d.%m.%Y"
                     ),
                 }
